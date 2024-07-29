@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 
+import javax.management.RuntimeErrorException;
 import java.time.LocalDate;
 
 @Service
@@ -69,9 +70,12 @@ public class EmprestimoService {
             if (findedEmprestimo.getLivro().equals(emprestimo.getLivro())) {
                 findedEmprestimo.setStatus(emprestimo.getStatus());
                 return this.emprestimosRepository.save(findedEmprestimo);
+            }else{
+                throw new RuntimeException("O usuário não pode ter mais de um empréstimo ativo ou ele está tentando devolver um livro que não empretou.");
             }
         }
-        throw new RuntimeException("Usuário ou livro não encontrado ou empréstimo não está ativo");
+
+        throw new RuntimeException("Erro desconhecido.");
 
     }
 
