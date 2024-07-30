@@ -6,10 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,6 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Usuario {
@@ -40,6 +38,6 @@ public class Usuario {
     @Column  @CreatedDate
     private LocalDate data_cadastro;
 
-    @Column(unique = true) @Length(min=11, max=11)
+    @Column(unique = true) @Length(min=11, max=11) @NotNull @NotBlank
     private String telefone;
 }

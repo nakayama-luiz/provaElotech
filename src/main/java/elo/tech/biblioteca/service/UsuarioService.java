@@ -25,6 +25,8 @@ public class UsuarioService {
     }
 
     public void delete(Long id){
+        Usuario usuario = this.findById(id);
+
         this.usuarioRepositoy.deleteById(id);
     }
 
