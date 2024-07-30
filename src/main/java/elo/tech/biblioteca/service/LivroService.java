@@ -118,12 +118,6 @@ public class LivroService {
          livro.setData_publicacao(data_publicacao);
 
 
-
-//       for(String categoria: response.getCategories()){
-//
-//           livro.setCategorias(List.of(Categoria.valueOf(categoria)));
-//       }
-
         List<Autor> autores = response.getAuthors().stream()
                 .map(s -> this.autorService.findOrCreateAutor(s))
                 .collect(Collectors.toList());
@@ -138,19 +132,16 @@ public class LivroService {
 
         Livros savedLivro = this.livroRepository.save(livro);
 
-        System.out.println(response.getCategories());
-
-
 
         for (Autor autor : autores) {
             autor.getLivros().add(savedLivro);
             this.autorRepository.save(autor);
         }
 
-        for (Categorias categoria : categorias) {
-            categoria.getLivros().add(savedLivro);
-            this.categoriaRepository.save(categoria);
-        }
+//        for (Categorias categoria : categorias) {
+//            categoria.getLivros().add(savedLivro);
+//            this.categoriaRepository.save(categoria);
+//        }
 
         savedLivro.setCategoria(categorias);
         savedLivro.setAutor(autores);

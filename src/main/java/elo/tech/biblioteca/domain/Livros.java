@@ -2,6 +2,7 @@ package elo.tech.biblioteca.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +45,7 @@ public class Livros {
 //    private List<Categoria> categorias;
 
     @ManyToMany
+    @Nullable
     @JoinTable(
             name = "livros_categorias",
             joinColumns = @JoinColumn(name = "livros_id"),

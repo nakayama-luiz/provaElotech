@@ -28,7 +28,7 @@ public class Categorias {
     @Column @NotNull @NotBlank
     private String categoria;
 
-    @ManyToMany(mappedBy = "categoria")
+    @ManyToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Livros> livros = new ArrayList<>();
 
