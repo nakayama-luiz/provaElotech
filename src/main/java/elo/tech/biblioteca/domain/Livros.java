@@ -1,12 +1,9 @@
 package elo.tech.biblioteca.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import elo.tech.biblioteca.domain.enums.Categoria;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
@@ -41,10 +38,18 @@ public class Livros {
     @Column @NotBlank @NotNull
     private String titulo;
 
-    @Enumerated(EnumType.STRING)
-    @ElementCollection
-    @NotNull @NotEmpty
-    private List<Categoria> categorias;
+//    @Enumerated(EnumType.STRING)
+//    @ElementCollection
+//    @NotNull @NotEmpty
+//    private List<Categoria> categorias;
+
+    @ManyToMany
+    @JoinTable(
+            name = "livros_categorias",
+            joinColumns = @JoinColumn(name = "livros_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private List<Categorias> categoria = new ArrayList<>();
 
     @ManyToMany(mappedBy = "livros")
     private List<Autor> autor = new ArrayList<>();

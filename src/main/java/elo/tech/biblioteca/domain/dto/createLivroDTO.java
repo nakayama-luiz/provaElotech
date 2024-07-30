@@ -1,7 +1,7 @@
 package elo.tech.biblioteca.domain.dto;
 
 import elo.tech.biblioteca.domain.Autor;
-import elo.tech.biblioteca.domain.enums.Categoria;
+import elo.tech.biblioteca.domain.Categorias;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ public class createLivroDTO {
 
     private LocalDate data_publicacao;
 
-    private List<Categoria> categorias;
+    private List<Categorias> categorias;
 
     @NotEmpty @NotNull @NotBlank
     private List<Autor> autor = new ArrayList<>();

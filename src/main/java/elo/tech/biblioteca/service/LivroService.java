@@ -1,8 +1,8 @@
 package elo.tech.biblioteca.service;
 
 import elo.tech.biblioteca.domain.*;
-import elo.tech.biblioteca.domain.enums.Categoria;
 import elo.tech.biblioteca.repository.AutorRepository;
+import elo.tech.biblioteca.repository.CategoriaRepository;
 import elo.tech.biblioteca.repository.LivroRepository;
 import elo.tech.biblioteca.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,9 +13,9 @@ import elo.tech.biblioteca.domain.dto.createLivroDTO;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class LivroService {
@@ -28,11 +28,18 @@ public class LivroService {
     private final AutorRepository autorRepository;
     @Autowired
     private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
-    public LivroService(LivroRepository livroRepository, AutorRepository autorRepository, UsuarioRepository usuarioRepository) {
+    public LivroService(LivroRepository livroRepository, AutorService autorService,
+                        AutorRepository autorRepository, UsuarioRepository usuarioRepository,
+                        CategoriaRepository categoriaRepository)
+    {
         this.livroRepository = livroRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.autorService = autorService;
         this.autorRepository = autorRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
     public Livros create(createLivroDTO createLivroDTO) {
@@ -40,6 +47,7 @@ public class LivroService {
        if(createLivroDTO.getAutor().isEmpty()){
            throw new EntityNotFoundException("Informe um autor para cadastrar livros.");
        }
+
 
         List<Autor> autores = new ArrayList<>();
 
@@ -54,7 +62,7 @@ public class LivroService {
                 .titulo(createLivroDTO.getTitulo())
                 .ISBN(createLivroDTO.getISBN())
                 .data_publicacao(createLivroDTO.getData_publicacao())
-                .categorias(createLivroDTO.getCategorias())
+                .categoria(createLivroDTO.getCategorias())
                 .build();
 
 
@@ -109,21 +117,42 @@ public class LivroService {
 
          livro.setData_publicacao(data_publicacao);
 
-       for(String categoria: response.getCategories()){
-           livro.setCategorias(List.of(Categoria.valueOf(categoria)));
-       }
+
+
+//       for(String categoria: response.getCategories()){
+//
+//           livro.setCategorias(List.of(Categoria.valueOf(categoria)));
+//       }
 
         List<Autor> autores = response.getAuthors().stream()
                 .map(s -> this.autorService.findOrCreateAutor(s))
                 .collect(Collectors.toList());
 
+        List<Categorias> categorias = response.getCategories().stream()
+                .map(categoria -> this.categoriaRepository.findByCategoria(categoria)
+                        .orElseGet(() -> this.categoriaRepository.save(Categorias.builder().categoria(categoria)
+                                .livros(List.of(livro)).build())))
+                .collect(Collectors.toList());
+
+        livro.setCategoria(categorias);
+
         Livros savedLivro = this.livroRepository.save(livro);
+
+        System.out.println(response.getCategories());
+
+
 
         for (Autor autor : autores) {
             autor.getLivros().add(savedLivro);
             this.autorRepository.save(autor);
         }
 
+        for (Categorias categoria : categorias) {
+            categoria.getLivros().add(savedLivro);
+            this.categoriaRepository.save(categoria);
+        }
+
+        savedLivro.setCategoria(categorias);
         savedLivro.setAutor(autores);
 
         return savedLivro;
