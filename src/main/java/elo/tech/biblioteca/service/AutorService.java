@@ -23,4 +23,8 @@ public class AutorService {
         }
         return findedAutor;
     }
+
+    public Autor create(Autor autor){
+        return this.autorRepository.save(autor);
+    }
 }
