@@ -19,6 +19,9 @@ Como isso, retorne a raiz do projeto e inicie o *container* com:
 docker-compose up -d
 ```
 
+### Deploy do BackEnd
+Na presente data, o Deploy do backend pode ser acessado pelo link: https://deploy.nakayama.cloud/
+
 ## Documentação da API
 
 A documentação também é acessível através do swagger:
