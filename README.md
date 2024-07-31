@@ -66,7 +66,7 @@ Exemplo de corpo:
 Exemplo de corpo:
 ```json
  {
-"id": 1,
+  "id": 1,
   "nome": "Pedro",
   "email": "pedro1@gmail.com",
   "telefone": "44998435710"
@@ -91,5 +91,77 @@ Exemplo de corpo:
 | :---------- | :--------- | :------------------------------------------ |
 | `id`      | `int` | **Obrigatório**. Id do usuário|
 
-### Integração Google Books
+### Livro
+
+#### Persiste livro a partir de um livro fornecido pela integração.
+
+```http
+  POST api/livro/integracao/novo-livro
+```
+Exemplo de corpo:
+```JSON
+ 
+  "items": [{
+			"volumeInfo": {
+				"title": "O Mestre E Margarida.",
+				"authors": [
+					"Mikhail bulgakov."
+				],
+				"publishedDate": "2012-12-01",
+				"categories": [
+					"Literatura"
+				],
+				"industryIdentifiers": [
+					{
+						"type": "ISBN_13",
+						"identifier": "9781234567897"
+					},
+					{
+						"type": "ISBN_10",
+						"identifier": "8468713481"
+					}
+				]
+			}
+		}]
+}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `items`      | `items` | **Obrigatório**.
+| `volumeInfo`      | `volumeInfo` | **Obrigatório**.
+| `title`      | `string` |**Obrigatório**. Título do volume (livro) |
+| `authors`      | `authors` |**Obrigatório**. Autores do livro |
+| `publishedDate`      | `date` |**Obrigatório**. Data de publicação|
+| `categories`      | `categories` |**Obrigatório**. Categorias do livro|
+| `industryIdentifiers`      | `industryIdentifiers` |Tipos de ISBN.|
+| `type`      | `type` |Tipos de ISBN (13, ou 10).|
+| `identifier`      | `string` |**Obrigatório**. ISBN|
+
+### Integração API Google Books
+
+#### Recupera dados da apartir da API do Google Books, dada a query
+
+```http
+  GET api/integracao/search
+```
+Exemplo de requisição:
+
+HOST/api/integracao/search?query=Viagem%20ao%20fim%20da%20noite
+
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `query`      | `string` | **Obrigatório**. Parametro de pesquisa da query.|
+
+#### Altera dados do usuário dado o ID.
+
+```http
+  GET api/integracao/search
+```
+Exemplo de requisição:
+
+HOST/api/integracao/titulo?titulo=Em busca do tempo Perdido
+
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `titulo`      | `string` | **Obrigatório**. Parametro de pesquisa para pesquisa pelo titulo|
 
