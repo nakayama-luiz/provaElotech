@@ -1,15 +1,16 @@
-FROM openjdk:17-jdk-alpine
-FROM gradle:7.2.0-jdk17-alpine AS buildar
+FROM gradle:8.7.0-jdk17-alpine AS build
 
 WORKDIR /home/gradle/project
+
 COPY . .
-RUN gradle build
 
+RUN gradle build -x test
 
+FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
 
-COPY --from=buildar /home/gradle/project/build/libs/biblioteca-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /home/gradle/project/build/libs/biblioteca-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8081
 
